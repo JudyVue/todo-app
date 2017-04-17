@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/nodemon/bin/nodemon.js server.js"
+    "start": "DEBUG='todo*' ./node_modules/nodemon/bin/nodemon.js server.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/JudyVue/todo-app#readme",
   "dependencies": {
+    "cors": "^2.8.3",
+    "debug": "^2.6.3",
     "express": "^4.15.2",
+    "http-errors": "^1.6.1",
+    "mongoose": "^4.9.4",
     "nodemon": "^1.11.0"
   }
 }
