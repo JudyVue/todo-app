@@ -19,17 +19,34 @@ const userSchema = Schema({
 userSchema.methods.generatePasswordHash = function(password){
   debug('generatePasswordHash');
 
-  return new Promise((resolve, reject) => {
-    bcrypt.hash(password, 10, (err, hash) => {
-      //if there is an error with bcrypt, reject it and show bcrypt's error
-      if (err) return reject(err);
+  let saltRounds = 10;
+  //docs say bcrypt can already return a promise, we'll see if this works
+  bcrypt.hash(password, saltRounds)
+  .then(hash => {
+    this.password = hash;
+    return this;
+  })
+  .catch(err => console.error(err));
+};
 
-      //otherwise, set the password property to the hash and resolve with the instantiated user (this)
-      this.password = hash;
-      resolve(this);
-    });
+userSchema.methods.comparePasswordHash = function(password){
+  debug('comparePasswordHash');
+
+  bcrypt.compare(password, this.password).then(res => {
+    if(!res) return createError(401, 'wrong password');
+    return this;
+  })
+  .catch(err => {
+    console.error('bcrypt failed', err.message);
   });
 };
+
+userSchema.methods.generateFindHash = function(){
+  debug('generateFindHash');
+
+  
+}
+
 
 
 module.exports = mongoose.model('user', userSchema);
